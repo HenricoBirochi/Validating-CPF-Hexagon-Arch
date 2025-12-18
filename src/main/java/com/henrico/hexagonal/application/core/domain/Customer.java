@@ -11,6 +11,11 @@ public class Customer {
         this.isValidCpf = false;
     }
 
+    public Customer(String name, String cpf) {
+        this.name = name;
+        this.cpf = cpf;
+    }
+
     public Customer(String id, String name, Address address, String cpf, Boolean isValidCpf) {
         this.id = id;
         this.name = name;
