@@ -12,4 +12,11 @@ public class AddressEntityMapper {
                 .state(address.getState())
                 .build();
     }
+    public static Address toAddress(AddressEntity addressEntity) {
+        return new Address(
+                addressEntity.getStreet(),
+                addressEntity.getCity(),
+                addressEntity.getStreet()
+        );
+    }
 }

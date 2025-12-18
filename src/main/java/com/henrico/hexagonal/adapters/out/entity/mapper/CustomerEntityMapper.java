@@ -11,7 +11,16 @@ public class CustomerEntityMapper {
                 .name(customer.getName())
                 .address(AddressEntityMapper.toAddressEntity(customer.getAddress()))
                 .cpf(customer.getCpf())
-                .isValidCpf(customer.getValidCpf())
+                .isValidCpf(customer.getIsValidCpf())
                 .build();
+    }
+    public static Customer toCustomer(CustomerEntity customerEntity) {
+        return new Customer(
+                customerEntity.getId(),
+                customerEntity.getName(),
+                AddressEntityMapper.toAddress(customerEntity.getAddress()),
+                customerEntity.getCpf(),
+                customerEntity.getIsValidCpf()
+        );
     }
 }
