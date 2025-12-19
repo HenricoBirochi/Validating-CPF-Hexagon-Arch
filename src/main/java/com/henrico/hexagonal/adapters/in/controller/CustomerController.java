@@ -6,6 +6,7 @@ import com.henrico.hexagonal.adapters.in.controller.response.CustomerResponse;
 import com.henrico.hexagonal.application.core.domain.Customer;
 import com.henrico.hexagonal.application.ports.in.FindCustomerByIdInputPort;
 import com.henrico.hexagonal.application.ports.in.InsertCustomerInputPort;
+import com.henrico.hexagonal.application.ports.in.UpdateCustomerInputPort;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,16 @@ public class CustomerController {
 
     private final InsertCustomerInputPort insertCustomerInputPort;
     private final FindCustomerByIdInputPort findCustomerByIdInputPort;
+    private final UpdateCustomerInputPort updateCustomerInputPort;
 
-    public CustomerController(InsertCustomerInputPort insertCustomerInputPort, FindCustomerByIdInputPort findCustomerByIdInputPort) {
+    public CustomerController(
+            InsertCustomerInputPort insertCustomerInputPort,
+            FindCustomerByIdInputPort findCustomerByIdInputPort,
+            UpdateCustomerInputPort updateCustomerInputPort
+    ) {
         this.insertCustomerInputPort = insertCustomerInputPort;
         this.findCustomerByIdInputPort = findCustomerByIdInputPort;
+        this.updateCustomerInputPort = updateCustomerInputPort;
     }
 
     @PostMapping()
@@ -34,6 +41,17 @@ public class CustomerController {
         Customer customer = findCustomerByIdInputPort.find(id);
         CustomerResponse customerResponse = CustomerMapper.toCustomerResponse(customer);
         return ResponseEntity.ok().body(customerResponse);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(
+            @PathVariable final String id,
+            @Valid @RequestBody CustomerRequest customerRequest
+    ) {
+        Customer customer = CustomerMapper.toCustomer(customerRequest);
+        customer.setId(id);
+        updateCustomerInputPort.update(customer, customerRequest.getZipCode());
+        return ResponseEntity.noContent().build();
     }
 
 }
