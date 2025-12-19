@@ -1,0 +1,21 @@
+package com.henrico.hexagonal.adapters.out;
+
+import com.henrico.hexagonal.adapters.out.entity.repository.CustomerRepository;
+import com.henrico.hexagonal.application.ports.out.DeleteCustomerByIdOutputPort;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DeleteCustomerByIdAdapter implements DeleteCustomerByIdOutputPort {
+
+    private final CustomerRepository customerRepository;
+
+    public DeleteCustomerByIdAdapter(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    @Override
+    public void delete(String id) {
+        customerRepository.deleteById(id);
+    }
+
+}
